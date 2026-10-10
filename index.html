@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSW Crime Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <h1>NSW Crime Statistics Dashboard</h1>
+            <p class="subtitle">Community Resource Centre - Interactive Crime Data Visualization</p>
+            <div class="data-source">
+                <span>Data Source: </span>
+                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFyxotbxgykmHC4eozTpi4UYYQhYPd4kTGToCk30VaQr7PJP4vV95_UYom4Rrk2boBP9z4o6QXsl9V/pub?output=csv" target="_blank" rel="noopener">NSW Statistical Area Monthly Data (SA4)</a>
+            </div>
+        </header>
+
+        <div class="filters-panel">
+            <div class="filter-group">
+                <label for="year-filter">Year</label>
+                <select id="year-filter" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label for="month-filter">Month</label>
+                <select id="month-filter" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label for="area-filter">NSW Statistical Area</label>
+                <select id="area-filter" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label for="category-filter">Offence Category</label>
+                <select id="category-filter" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label for="subcategory-filter">Offence Subcategory</label>
+                <select id="subcategory-filter" multiple></select>
+            </div>
+            <button id="reset-filters" class="btn-reset">Reset All Filters</button>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon">📊</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpi-total-incidents">0</div>
+                    <div class="kpi-label">Total Incidents</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon">🎯</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpi-top-category">-</div>
+                    <div class="kpi-label">Most Common Offence Category</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon">📍</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpi-top-area">-</div>
+                    <div class="kpi-label">Highest Incident Area</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon">📅</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="kpi-latest-month">-</div>
+                    <div class="kpi-label">Latest Reporting Month</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h2>Crime Incidents Over Time</h2>
+                <canvas id="chart-time"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Incidents by Offence Category</h2>
+                <canvas id="chart-category"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Incidents by Geographic Area</h2>
+                <canvas id="chart-area"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Top Areas by Incident Count</h2>
+                <canvas id="chart-top-areas"></canvas>
+            </div>
+        </div>
+
+        <div class="rankings-panel">
+            <div class="ranking-section">
+                <h3>Top 10 Offence Categories</h3>
+                <table id="ranking-categories">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Category</th>
+                            <th>Incidents</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="ranking-section">
+                <h3>Top 10 Areas</h3>
+                <table id="ranking-areas">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Area</th>
+                            <th>Incidents</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="ranking-section">
+                <h3>Top 10 Subcategories</h3>
+                <table id="ranking-subcategories">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Subcategory</th>
+                            <th>Category</th>
+                            <th>Incidents</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading crime data...</p>
+    </div>
+
+    <div id="error-overlay" class="error-overlay hidden">
+        <div class="error-content">
+            <h2>⚠️ Error Loading Data</h2>
+            <p id="error-message"></p>
+            <button id="retry-btn" class="btn-retry">Retry</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
